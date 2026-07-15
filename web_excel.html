@@ -42,24 +42,27 @@
     }
 
     .titlebar {
-      height: 48px;
-      flex: 0 0 48px;
+      height: 56px;
+      flex: 0 0 56px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 0 16px;
+      gap: 10px;
+      padding: 0 12px;
       color: #fff;
       background: linear-gradient(110deg, var(--excel-dark), var(--excel));
       box-shadow: 0 1px 5px rgba(0,0,0,.18);
       z-index: 40;
+      overflow-x: auto;
+      overflow-y: hidden;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 9px;
-      min-width: 150px;
+      min-width: 142px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .brand-mark {
@@ -76,7 +79,8 @@
     }
 
     #workbookName {
-      width: min(340px, 32vw);
+      width: min(250px, 23vw);
+      min-width: 130px;
       padding: 6px 9px;
       border: 1px solid transparent;
       border-radius: 4px;
@@ -98,6 +102,7 @@
       align-items: center;
       gap: 5px;
       margin-left: auto;
+      white-space: nowrap;
     }
 
     .title-btn {
@@ -111,6 +116,45 @@
     }
 
     .title-btn:hover { background: rgba(255,255,255,.16); }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-left: 9px;
+      border-left: 1px solid rgba(255,255,255,.24);
+      white-space: nowrap;
+    }
+
+    .nav-action {
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      color: #fff;
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .nav-action:hover {
+      border-color: rgba(255,255,255,.2);
+      background: rgba(255,255,255,.14);
+    }
+
+    .nav-action.upload-action {
+      color: var(--excel-dark);
+      background: #fff;
+      border-color: #fff;
+      box-shadow: 0 3px 10px rgba(0,0,0,.14);
+    }
+
+    .nav-action.upload-action:hover { background: #eff8f3; }
+    .nav-action .nav-icon { font-size: 15px; }
 
     .tabs {
       height: 39px;
@@ -418,9 +462,46 @@
     .field label { display: block; margin-bottom: 5px; color: #42484c; font-size: 12px; font-weight: 650; }
     .field input, .field select { width: 100%; height: 36px; padding: 0 9px; border: 1px solid #b9c0c4; border-radius: 5px; outline: none; }
     .field input:focus, .field select:focus { border-color: var(--excel); box-shadow: 0 0 0 1px var(--excel); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-grid .field { margin-bottom: 0; }
+    .field-note { margin: 5px 0 0; color: #6a7277; font-size: 11px; line-height: 1.45; }
+
+    .upload-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 170px;
+      padding: 24px;
+      border: 2px dashed #91bca5;
+      border-radius: 9px;
+      color: #365a47;
+      background: #f4faf7;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .upload-zone:hover { border-color: var(--excel); background: #edf7f1; }
+    .upload-zone .upload-icon { margin-bottom: 7px; font-size: 34px; }
+    .upload-zone strong { font-size: 14px; }
+    .upload-zone small { margin-top: 5px; color: #6b7670; }
+    .selected-file {
+      display: none;
+      align-items: center;
+      gap: 9px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px solid #c7ddd1;
+      border-radius: 6px;
+      color: #24523a;
+      background: #edf7f1;
+      font-size: 12px;
+    }
+    .selected-file.show { display: flex; }
     .primary-btn, .secondary-btn { height: 35px; padding: 0 16px; border-radius: 5px; cursor: pointer; }
     .primary-btn { color: #fff; border: 1px solid var(--excel); background: var(--excel); }
     .primary-btn:hover { background: var(--excel-dark); }
+    .primary-btn:disabled { cursor: not-allowed; opacity: .5; background: #70857a; border-color: #70857a; }
     .secondary-btn { border: 1px solid #b8bec2; background: #fff; }
     .secondary-btn:hover { background: #f3f4f5; }
 
@@ -480,9 +561,16 @@
 
     @media (max-width: 900px) {
       .title-actions .optional { display: none; }
+      .nav-action .nav-label { display: none; }
+      .nav-action { min-width: 34px; justify-content: center; padding: 0 8px; }
+      #workbookName { width: 150px; }
       .ribbon { min-height: 88px; flex-basis: 88px; }
       .ribbon-panel { height: 87px; }
       .group { height: 71px; }
+    }
+
+    @media (max-width: 680px) {
+      .form-grid { grid-template-columns: 1fr; }
     }
 
     @media print {
@@ -500,6 +588,20 @@
   <header class="titlebar">
     <div class="brand"><span class="brand-mark">X</span><span>Web Excel</span></div>
     <input id="workbookName" value="Kitabu kipya" aria-label="Jina la workbook">
+    <nav class="header-nav" aria-label="Quick actions">
+      <button class="nav-action" type="button" onclick="openNewWorkbookModal()" title="Tengeneza workbook mpya">
+        <span class="nav-icon">＋</span><span class="nav-label">New</span>
+      </button>
+      <button class="nav-action upload-action" type="button" onclick="openUploadModal()" title="Upload Excel, CSV au project">
+        <span class="nav-icon">⬆</span><span class="nav-label">Upload Excel</span>
+      </button>
+      <button class="nav-action" type="button" onclick="openAddSheetModal()" title="Ongeza sheet mpya">
+        <span class="nav-icon">▦</span><span class="nav-label">Add Sheet</span>
+      </button>
+      <button class="nav-action" type="button" onclick="openQuickFormulaModal()" title="Weka formula kwa popup">
+        <span class="nav-icon">fx</span><span class="nav-label">Formula</span>
+      </button>
+    </nav>
     <div class="title-actions">
       <button class="title-btn" onclick="undo()" title="Undo (Ctrl+Z)">↶</button>
       <button class="title-btn" onclick="redo()" title="Redo (Ctrl+Y)">↷</button>
@@ -520,8 +622,8 @@
   <section class="ribbon">
     <div class="ribbon-panel" data-panel="file">
       <div class="group" data-label="Workbook">
-        <button class="tool-btn big" onclick="newWorkbook()"><span class="ico">＋</span>New</button>
-        <button class="tool-btn big" onclick="document.getElementById('fileInput').click()"><span class="ico">📂</span>Open</button>
+        <button class="tool-btn big" onclick="openNewWorkbookModal()"><span class="ico">＋</span>New</button>
+        <button class="tool-btn big" onclick="openUploadModal()"><span class="ico">📂</span>Upload</button>
         <button class="tool-btn big" onclick="saveProject()"><span class="ico">💾</span>Save</button>
       </div>
       <div class="group" data-label="Export">
@@ -666,7 +768,7 @@
   </main>
 
   <div class="sheetbar" id="sheetbar">
-    <button class="add-sheet" onclick="addSheet()" title="Ongeza sheet">＋</button>
+    <button class="add-sheet" onclick="openAddSheetModal()" title="Ongeza sheet">＋</button>
   </div>
 
   <div class="statusbar">
@@ -684,6 +786,94 @@
 <input type="file" id="imageInput" accept="image/*" hidden>
 <div class="toast-wrap" id="toastWrap"></div>
 <div class="file-drop" id="fileDrop">Dondosha Excel/CSV/JSON hapa</div>
+
+<div class="modal-backdrop" id="uploadModal">
+  <form class="modal" id="uploadForm">
+    <div class="modal-head"><h3>Upload Excel Workbook</h3><button class="modal-close" type="button" onclick="closeModal('uploadModal')">×</button></div>
+    <div class="modal-body">
+      <label class="upload-zone" for="uploadExcelInput">
+        <span class="upload-icon">⬆</span>
+        <strong>Click hapa kuchagua Excel file</strong>
+        <small>Formats: .xlsx, .xls, .csv au .webexcel.json</small>
+        <input type="file" id="uploadExcelInput" accept=".xlsx,.xls,.csv,.json,.webexcel.json" hidden>
+      </label>
+      <div class="selected-file" id="selectedUploadFile"><span>📄</span><span id="selectedUploadFileName">Hakuna file lililochaguliwa</span></div>
+      <p class="field-note">Workbook utakayopakia utafunguliwa ndani ya spreadsheet hii. Kama ina sheets nyingi, zote zitaingizwa.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="secondary-btn" type="button" onclick="closeModal('uploadModal')">Cancel</button>
+      <button class="primary-btn" id="uploadSubmitBtn" type="submit" disabled>Upload & Open</button>
+    </div>
+  </form>
+</div>
+
+<div class="modal-backdrop" id="newWorkbookModal">
+  <form class="modal" id="newWorkbookForm">
+    <div class="modal-head"><h3>Create New Workbook</h3><button class="modal-close" type="button" onclick="closeModal('newWorkbookModal')">×</button></div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Workbook name</label>
+        <input id="newWorkbookName" value="Kitabu kipya" maxlength="80" required>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Number of rows</label><input id="newWorkbookRows" type="number" value="60" min="20" max="500" required></div>
+        <div class="field"><label>Number of columns</label><input id="newWorkbookCols" type="number" value="26" min="10" max="100" required></div>
+      </div>
+      <p class="field-note">Workbook mpya itaanza na sheet moja. Data ya sasa itaendelea kuwepo kwenye undo history mpaka browser ire-load.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="secondary-btn" type="button" onclick="closeModal('newWorkbookModal')">Cancel</button>
+      <button class="primary-btn" type="submit">Create Workbook</button>
+    </div>
+  </form>
+</div>
+
+<div class="modal-backdrop" id="addSheetModal">
+  <form class="modal" id="addSheetForm">
+    <div class="modal-head"><h3>Add New Sheet</h3><button class="modal-close" type="button" onclick="closeModal('addSheetModal')">×</button></div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Sheet name</label>
+        <input id="newSheetName" maxlength="31" required>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Number of rows</label><input id="newSheetRows" type="number" value="60" min="20" max="500" required></div>
+        <div class="field"><label>Number of columns</label><input id="newSheetCols" type="number" value="26" min="10" max="100" required></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="secondary-btn" type="button" onclick="closeModal('addSheetModal')">Cancel</button>
+      <button class="primary-btn" type="submit">Add Sheet</button>
+    </div>
+  </form>
+</div>
+
+<div class="modal-backdrop" id="quickFormulaModal">
+  <form class="modal" id="quickFormulaForm">
+    <div class="modal-head"><h3>Insert Formula</h3><button class="modal-close" type="button" onclick="closeModal('quickFormulaModal')">×</button></div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Function</label>
+        <select id="quickFormulaFunction" required>
+          <option value="SUM">SUM — Jumla</option>
+          <option value="AVERAGE">AVERAGE — Wastani</option>
+          <option value="MIN">MIN — Kiwango cha chini</option>
+          <option value="MAX">MAX — Kiwango cha juu</option>
+          <option value="COUNT">COUNT — Hesabu ya namba</option>
+        </select>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Data range</label><input id="quickFormulaRange" placeholder="A1:A10" required></div>
+        <div class="field"><label>Result cell</label><input id="quickFormulaTarget" placeholder="A11" required></div>
+      </div>
+      <p class="field-note">Mfano: ukichagua <b>SUM</b>, range <b>A1:A10</b> na result cell <b>A11</b>, formula itakuwa <b>=SUM(A1:A10)</b>.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="secondary-btn" type="button" onclick="closeModal('quickFormulaModal')">Cancel</button>
+      <button class="primary-btn" type="submit">Insert Formula</button>
+    </div>
+  </form>
+</div>
 
 <div class="modal-backdrop" id="findModal">
   <div class="modal">
@@ -746,6 +936,7 @@
   const nameBox = document.getElementById('nameBox');
   const workbookName = document.getElementById('workbookName');
   const fileInput = document.getElementById('fileInput');
+  const uploadExcelInput = document.getElementById('uploadExcelInput');
   const imageInput = document.getElementById('imageInput');
 
   let state = createInitialState();
@@ -1404,6 +1595,39 @@
   function openModal(id){document.getElementById(id).classList.add('show');setTimeout(()=>document.getElementById(id).querySelector('input,button')?.focus(),30);}
   window.closeModal=function(id){document.getElementById(id).classList.remove('show');workspace.focus();};
 
+  function nextSheetName() {
+    let n=1;const names=new Set(state.sheets.map(s=>s.name));while(names.has(`Sheet${n}`))n++;return `Sheet${n}`;
+  }
+
+  window.openUploadModal=function(){
+    uploadExcelInput.value='';
+    document.getElementById('selectedUploadFile').classList.remove('show');
+    document.getElementById('selectedUploadFileName').textContent='Hakuna file lililochaguliwa';
+    document.getElementById('uploadSubmitBtn').disabled=true;
+    openModal('uploadModal');
+  };
+
+  window.openNewWorkbookModal=function(){
+    document.getElementById('newWorkbookName').value='Kitabu kipya';
+    document.getElementById('newWorkbookRows').value=60;
+    document.getElementById('newWorkbookCols').value=26;
+    openModal('newWorkbookModal');
+  };
+
+  window.openAddSheetModal=function(){
+    document.getElementById('newSheetName').value=nextSheetName();
+    document.getElementById('newSheetRows').value=60;
+    document.getElementById('newSheetCols').value=26;
+    openModal('addSheetModal');
+  };
+
+  window.openQuickFormulaModal=function(){
+    const n=normalizedSelection();
+    document.getElementById('quickFormulaRange').value=n.r1===n.r2&&n.c1===n.c2?address(n.r1,n.c1):`${address(n.r1,n.c1)}:${address(n.r2,n.c2)}`;
+    document.getElementById('quickFormulaTarget').value=address(n.r2+1,n.c1);
+    openModal('quickFormulaModal');
+  };
+
   function findMatches(){
     const q=document.getElementById('findText').value;if(!q)return[];const matchCase=document.getElementById('matchCase').checked;const needle=matchCase?q:q.toLowerCase();const matches=[];
     Object.entries(activeSheet().cells).forEach(([key,cell])=>{const hay=matchCase?String(cell.v??''):String(cell.v??'').toLowerCase();if(hay.includes(needle)){const [r,c]=key.split(':').map(Number);matches.push({r,c});}});
@@ -1421,11 +1645,11 @@
   }
 
   function switchSheet(i){if(editingCell)commitEdit();state.activeSheet=i;selection={start:{r:0,c:0},end:{r:0,c:0}};workspace.querySelectorAll('.floating-object').forEach(x=>x.remove());renderAll();queueSave();}
-  window.addSheet=function(){pushHistory();let n=1;const names=new Set(state.sheets.map(s=>s.name));while(names.has(`Sheet${n}`))n++;state.sheets.push(createSheet(`Sheet${n}`));state.activeSheet=state.sheets.length-1;selection={start:{r:0,c:0},end:{r:0,c:0}};renderAll();queueSave();};
+  window.addSheet=function(name=nextSheetName(),rows=60,cols=26){pushHistory();state.sheets.push(createSheet(name,rows,cols));state.activeSheet=state.sheets.length-1;selection={start:{r:0,c:0},end:{r:0,c:0}};renderAll();queueSave();};
   function renameSheet(i){const name=prompt('Jina jipya la sheet:',state.sheets[i].name);if(!name?.trim())return;pushHistory();state.sheets[i].name=name.trim().slice(0,40);renderSheetTabs();queueSave();}
   function deleteSheet(i){if(state.sheets.length===1)return toast('Workbook lazima iwe na sheet moja angalau.','warn');if(!confirm(`Futa ${state.sheets[i].name}?`))return;pushHistory();state.sheets.splice(i,1);state.activeSheet=Math.min(state.activeSheet,state.sheets.length-1);selection={start:{r:0,c:0},end:{r:0,c:0}};renderAll();queueSave();}
 
-  window.newWorkbook=function(){if(!confirm('Anza workbook mpya? Mabadiliko ya sasa yanaweza kupotea kama hujapakua project.'))return;pushHistory();state=createInitialState();history=[];future=[];selection={start:{r:0,c:0},end:{r:0,c:0}};renderAll();queueSave();toast('Workbook mpya imefunguliwa.');};
+  window.newWorkbook=function(){window.openNewWorkbookModal();};
   window.restoreAutosave=function(){const saved=localStorage.getItem(STORAGE_KEY);if(!saved)return toast('Hakuna autosave iliyopatikana.','warn');try{pushHistory();state=JSON.parse(saved);normalizeState();renderAll();toast('Autosave imerudishwa.');}catch(e){toast('Autosave imeharibika.','error');}};
   window.clearSavedData=function(){if(confirm('Futa autosave ya browser? Workbook inayoonekana haitafutwa.')){localStorage.removeItem(STORAGE_KEY);toast('Autosave imefutwa.');}};
 
@@ -1449,6 +1673,54 @@
   };
 
   function getCellFromSheet(sheet,r,c){return sheet.cells[cellKey(r,c)];}
+
+  uploadExcelInput.addEventListener('change',()=>{
+    const file=uploadExcelInput.files[0];
+    const info=document.getElementById('selectedUploadFile');
+    const submit=document.getElementById('uploadSubmitBtn');
+    if(!file){info.classList.remove('show');submit.disabled=true;return;}
+    const size=file.size<1024*1024?`${Math.max(1,Math.round(file.size/1024))} KB`:`${(file.size/1024/1024).toFixed(2)} MB`;
+    document.getElementById('selectedUploadFileName').textContent=`${file.name} • ${size}`;
+    info.classList.add('show');submit.disabled=false;
+  });
+
+  document.getElementById('uploadForm').addEventListener('submit',e=>{
+    e.preventDefault();const file=uploadExcelInput.files[0];if(!file)return toast('Chagua Excel file kwanza.','warn');
+    closeModal('uploadModal');openFile(file);
+  });
+
+  document.getElementById('newWorkbookForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const name=document.getElementById('newWorkbookName').value.trim()||'Kitabu kipya';
+    const rows=Math.max(20,Math.min(500,Number(document.getElementById('newWorkbookRows').value)||60));
+    const cols=Math.max(10,Math.min(100,Number(document.getElementById('newWorkbookCols').value)||26));
+    if(Object.keys(activeSheet().cells).length&&!confirm('Workbook ya sasa ina data. Endelea kutengeneza workbook mpya?'))return;
+    pushHistory();state={version:2,name,activeSheet:0,zoom:100,gridlines:true,sheets:[createSheet('Sheet1',rows,cols)]};
+    selection={start:{r:0,c:0},end:{r:0,c:0}};closeModal('newWorkbookModal');renderAll();queueSave();toast('Workbook mpya imetengenezwa.');
+  });
+
+  document.getElementById('addSheetForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const name=document.getElementById('newSheetName').value.trim();
+    const rows=Math.max(20,Math.min(500,Number(document.getElementById('newSheetRows').value)||60));
+    const cols=Math.max(10,Math.min(100,Number(document.getElementById('newSheetCols').value)||26));
+    if(state.sheets.some(s=>s.name.toLowerCase()===name.toLowerCase()))return toast('Jina hilo la sheet tayari limetumika.','warn');
+    closeModal('addSheetModal');addSheet(name,rows,cols);toast(`${name} imeongezwa.`);
+  });
+
+  document.getElementById('quickFormulaForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const fn=document.getElementById('quickFormulaFunction').value;
+    const rangeText=document.getElementById('quickFormulaRange').value.trim().toUpperCase();
+    const targetText=document.getElementById('quickFormulaTarget').value.trim().toUpperCase();
+    const rangeParts=rangeText.split(':');const a=parseAddress(rangeParts[0]);const b=parseAddress(rangeParts[1]||rangeParts[0]);const target=parseAddress(targetText);
+    if(!a||!b||!target)return toast('Range au result cell si sahihi. Mfano A1:A10 na A11.','warn');
+    const r1=Math.min(a.r,b.r),r2=Math.max(a.r,b.r),c1=Math.min(a.c,b.c),c2=Math.max(a.c,b.c);
+    if(target.r>=r1&&target.r<=r2&&target.c>=c1&&target.c<=c2)return toast('Result cell isiwe ndani ya data range; italeta circular formula.','warn');
+    pushHistory();const s=activeSheet();s.rows=Math.max(s.rows,target.r+1,r2+1);s.cols=Math.max(s.cols,target.c+1,c2+1);
+    getCell(target.r,target.c,true).v=`=${fn}(${address(r1,c1)}:${address(r2,c2)})`;
+    selection={start:{...target},end:{...target}};closeModal('quickFormulaModal');renderGrid();updateSelectionUI();queueSave();toast('Formula imewekwa.');
+  });
 
   fileInput.addEventListener('change',e=>{const f=e.target.files[0];if(f)openFile(f);e.target.value='';});
   imageInput.addEventListener('change',e=>{const f=e.target.files[0];if(f)insertImageFile(f);e.target.value='';});
